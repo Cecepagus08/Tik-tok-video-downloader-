@@ -6,6 +6,7 @@ document.getElementById('videoUrl').addEventListener('input', async () => {
 
     // Tampilkan loading indicator
     loading.style.display = "block";
+    output.style.display = "grid";
 
     if (!videoUrl) {
         output.textContent = '';
@@ -47,6 +48,7 @@ document.getElementById('videoUrl').addEventListener('input', async () => {
             const formattedLikes = formatNumberWithUnit(videoData.stats.likes);
             const formattedComments = formatNumberWithUnit(videoData.stats.comments);
             const formattedViews = formatNumberWithUnit(videoData.stats.views);
+            output.style.display = "grid"
 
             // Tampilkan data video di UI
             output.innerHTML = `
