@@ -1,0 +1,10 @@
+# Mengabaikan file environment
+.env
+
+# Mengabaikan folder node_modules agar tidak ikut di-push
+node_modules
+
+# Mengabaikan log dan file cache
+npm-debug.log
+yarn-error.log
+
