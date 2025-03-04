@@ -1,13 +1,32 @@
+function pasteText() {
+    const videoUrlInput = document.getElementById("videoUrl");
+    videoUrlInput.value  = "";
+      setTimeout(()=>{
+      navigator.clipboard.readText()
+          .then(text => {
+              videoUrlInput.value = text;
+              // icu event input
+              videoUrlInput.dispatchEvent(new Event('input'));
+          })
+          .catch(err => console.error("Gagal mengambil teks dari clipboard:", err));
+        
+      },100)
+    
+  
+}
+
+
 document.getElementById('videoUrl').addEventListener('input', async () => {
-    const videoUrl = document.getElementById('videoUrl').value;
-    const output = document.querySelector('.output');
-    const resultElement = document.getElementById('result');
-    const loading = document.querySelector('.loading');
+     const videoUrl = document.getElementById('videoUrl').value;
+     const output = document.querySelector('.output');
+     const resultElement = document.getElementById('result');
+     const loading = document.querySelector('.loading');
 
     // Tampilkan loading indicator
     loading.style.display = "block";
     output.style.display = "grid";
-
+    
+    // kondisi ketokaburl tidak ada
     if (!videoUrl) {
         output.textContent = '';
         loading.style.display = "none";
@@ -36,6 +55,15 @@ document.getElementById('videoUrl').addEventListener('input', async () => {
                 loading.style.display = "none";
                 return;
             }
+            function removeHashtags(description, hashtags) {
+              hashtags.forEach(tag => {
+                  const regex = new RegExp(`#${tag.hashtagName}\\b`, 'gi'); // Buat regex untuk mencocokkan hashtag
+                  description = description.replace(regex, '').trim(); // Hapus hashtag dari deskripsi
+              });
+              return description;
+          }
+          const cleanDescription = removeHashtags(videoData.description, videoData.hashtags);
+
 
             // Fungsi untuk memformat angka dengan satuan
             function formatNumberWithUnit(number) {
@@ -49,8 +77,7 @@ document.getElementById('videoUrl').addEventListener('input', async () => {
             const formattedComments = formatNumberWithUnit(videoData.stats.comments);
             const formattedViews = formatNumberWithUnit(videoData.stats.views);
             output.style.display = "grid"
-
-            // Tampilkan data video di UI
+            
             output.innerHTML = `
                 <div class="cover">
                     <img src="${videoData.cover}" alt="">
@@ -62,9 +89,14 @@ document.getElementById('videoUrl').addEventListener('input', async () => {
                     <li><i class="ph-fill ph-play"></i><p>${formattedViews}</p></li>
                 </ul>
                 <p class="nickname">@${videoData.author.nickname}</p>
-                <p class="caption">${videoData.description}</p>
+                    <p class="caption">${cleanDescription}</p>
+<p class="hastag">${videoData.hashtags.map(tag => `#${tag.hashtagName}`).join(' ')}</p>
+
                 <a href="${videoData.downloadUrl}" target="_blank" class="download-btn">DOWNLOAD VIDEO</a>
             `;
+
+            // Tampilkan data video di UI
+            
         } else {
             resultElement.textContent = 'Error: ' + (resolveData.error || 'Unknown error');
         }

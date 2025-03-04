@@ -2,13 +2,11 @@ const express = require('express');
 const axios = require('axios');
 const path = require('path');
 require('dotenv').config();
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Sajikan file frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
-
 // Endpoint default untuk root
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
@@ -68,10 +66,9 @@ app.get('/api/tiktok', async (req, res) => {
     } catch (error) {
         console.error('Error fetching TikTok video:', error.message);
        
-        res.status(500).json({ error: 'Failed to fetch video data' });
+        res.status(500).json({error: "video tidak ditemukan"});
     }
 });
-
 // Jalankan server
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
